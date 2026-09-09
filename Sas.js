@@ -195,6 +195,9 @@ function acheterTicket(id, nom) {
     if (seat == false)
         console.log('Train complet.')
     return
+    let ticket = creatingTicket(trip,passangerName)
+    console.log('Ticket acheté avec succès ! ');
+    
 }   
 
 
