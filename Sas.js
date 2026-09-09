@@ -190,13 +190,13 @@ function acheterTicket(id, nom) {
         console.log('Trajet introuvable.');
         return
     }
-    checkSeat(){
-        let seat = checkSeat(id)
-        if (seat == false)
-            console.log('Train complet.')
-        return
-    }
-}
+
+    let seat = checkSeat(id)
+    if (seat == false)
+        console.log('Train complet.')
+    return
+}   
+
 
 // AFFICHAGE DE TRIPS
 function Afichage() {
@@ -233,10 +233,13 @@ function checkSeat(id) {
 function creatingTicket(trip, passengerName) {
     let seatNumber = 50 - trip.availableSeats + 1
     let newTicket = {
-        id : seatNumber++,
-        passangerName : passengerName,
-        tripId : trip.checkId,
-        price : trip.price
+        id: seatNumber++,
+        passangerName: passengerName,
+        tripId: trip.id,
+        price: trip.price
     }
+    trip.availableSeats--
+    newTicket.push(newTicket)
+    return newTicket
 }
 
