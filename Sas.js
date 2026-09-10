@@ -199,7 +199,7 @@ function buyTicket(inputId, passengerName) {
     }
     let ticket = creatingTicket(trip, passengerName)
     console.log(`\n Ticket acheté avec succès ! 
-        Ticket #${(tickets.length - 1) + 1}
+        Ticket # ${(tickets.length - 1) + 1}
         Passager : ${passengerName}
         Trajet : ${trip.departureTime} -> ${trip.destination}
         Place : ${ticket.seatNumber}
@@ -242,7 +242,7 @@ function checkSeat(inputId) {
 // FUNCTION DE CREATION DE TICKET
 function creatingTicket(trip, passengerName) {
     let newTicket = {
-        id: tickets.length + 1,
+        id: (tickets.length - 1) + 1,
         passangerName: passengerName,
         seatNumber: 51 - trip.availableSeats,
         tripId: trip.id,
@@ -254,13 +254,13 @@ function creatingTicket(trip, passengerName) {
 }
 //affiche les ticket 
 function afficherTickets() {
-    console.log('===TICKETs===\n')
+    console.log('         ===TICKETs===\n')
     if (tickets.length === 0) {
         console.log('Aucun ticket enregistré.\n');
         return;
     }
     for (let ticket of tickets) {
-        let trip = checkId(trips.id)
+        let trip = checkId(ticket.tripId)
         console.log(`
             Ticket #: ${ticket.id}
             Passager :${ticket.passangerName}
@@ -298,10 +298,15 @@ function menuPrincipal() {
         switch (choix) {
             case '1':
                 Afichage()
+                break
             case '2':
                 buyTicket()
+                break
             case '3':
-                afficherTickets
+                afficherTickets()
+                break
+            case '4':
+                annulationTicket()
         }
 
 
@@ -312,3 +317,22 @@ function menuPrincipal() {
     }
 }
 menuPrincipal()
+function annulationTicket() {
+    let idIAnnul = Number(prompt('Entrer le ID de votre ticket pour votre suprimation: '))
+    let ticketFunction = false
+    for (let i = 0; i < tickets.length; i++) {
+        if (tickets[i].id === idIAnnul) {
+            let trip = checkId(tickets[i].tripId)
+            if (trip) {
+                trip.availableSeats++
+            }
+        }
+        tickets.splice(i, 1)
+        ticketFunction = true
+        console.log(`Identifiant du ticket : ${idIAnnul}
+        Ticket annulé avec succès.!`)
+        break
+    }console.log("Je n'ai pas trouvé ton trajet!")
+}
+
+//  menuPrincipal()
