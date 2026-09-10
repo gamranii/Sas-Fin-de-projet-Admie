@@ -183,6 +183,29 @@ const trips = [
 const prompt = require('prompt-sync')();
 const tickets = []
 
+function acheterTicket(inputId, passengerName) {
+    id = Number(prompt('entrer votre id de votre trajet: '))
+    passengerName = prompt('entrer vortre nom: ')
+    let trip = checkId(inputId)
+    if (trip == false) {
+        console.log('Trajet introuvable.');
+        return
+    }
+
+    let seat = checkSeat(inputId)
+    if (seat == false) {
+        console.log('Train complet.')
+        return
+    }
+    let ticket = creatingTicket(trip, passengerName)
+    console.log(`\n Ticket acheté avec succès ! 
+        Ticket #${(tickets.length - 1) + 1}
+        Passager : ${passengerName}
+        Trajet : ${trip.departureTime} -> ${trip.destination}
+        Place : ${ticket.seatNumber}
+        prix : ${ticket.price} \n`);
+
+}
 // AFFICHAGE DE TRIPS
 function Afichage() {
     console.log('\n=== TRAJETS DISPONIBLES ===\n')
@@ -192,7 +215,7 @@ function Afichage() {
            Arrivée : ${trips[i].arrivalTime}
            Prix :${trips[i].price}DH
            Places disponibles :${trips[i].availableSeats} \n`)
-           console.log('--------------------------------------------------');
+        console.log('--------------------------------------------------');
     }
 
 }
@@ -218,11 +241,10 @@ function checkSeat(inputId) {
 }
 // FUNCTION DE CREATION DE TICKET
 function creatingTicket(trip, passengerName) {
-    let seatNumber = 50 - trip.availableSeats + 1
     let newTicket = {
         id: tickets.length + 1,
         passangerName: passengerName,
-        seatNumber: seatNumber,
+        seatNumber: 51 - trip.availableSeats,
         tripId: trip.id,
         price: trip.price
     }
@@ -230,25 +252,23 @@ function creatingTicket(trip, passengerName) {
     tickets.push(newTicket)
     return newTicket
 }
-
-// LA FUNCTION MERE 
-function acheterTicket(inputId, passengerName) {
-    id = Number(prompt('entrer votre id de votre trajet: '))
-    passengerName = prompt('entrer vortre nom: ')
-    let trip = checkId(inputId)
-    if (trip == false) {
-        console.log('Trajet introuvable.');
-        return
+//affiche les ticket 
+function afficherTickets() {
+    console.log('===TICKETs===\n')
+    if (tickets.length === 0) {
+        console.log('Aucun ticket enregistré.\n');
+        return;
     }
+    for (let ticket of tickets){
+        let trip = checkId(trips.id)
+        console.log(`
+            Ticket #: ${ticket.id}
+            Passager :${ticket.passangerName}
+            trajet: ${trip.departure} -> ${trip.destination}
+            place: ${ticket.seatNumber}
+            prix : ${trip.price} DH`)
+        
+        }
 
-    let seat = checkSeat(inputId)
-    if (seat == false) {
-        console.log('Train complet.')
-        return
-    }
-    let ticket = creatingTicket(trip, passengerName)
-    console.log('Ticket acheté avec succès ! ');
-
-}   
-acheterTicket()
-Afichage()
+        
+}
