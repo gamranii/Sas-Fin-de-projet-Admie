@@ -183,8 +183,8 @@ const trips = [
 const prompt = require('prompt-sync')();
 const tickets = []
 
-function acheterTicket(inputId, passengerName) {
-    id = Number(prompt('entrer votre id de votre trajet: '))
+function buyTicket(inputId, passengerName) {
+    inputId = Number(prompt('entrer votre id de votre trajet: '))
     passengerName = prompt('entrer vortre nom: ')
     let trip = checkId(inputId)
     if (trip == false) {
@@ -222,7 +222,7 @@ function Afichage() {
 // CHECKING BY ID
 function checkId(inputId) {
     for (let i = 0; i < trips.length; i++) {
-        if (trips[i].id == id) {
+        if (trips[i].id == inputId) {
             return trips[i]
         }
     }
@@ -259,7 +259,7 @@ function afficherTickets() {
         console.log('Aucun ticket enregistré.\n');
         return;
     }
-    for (let ticket of tickets){
+    for (let ticket of tickets) {
         let trip = checkId(trips.id)
         console.log(`
             Ticket #: ${ticket.id}
@@ -267,8 +267,48 @@ function afficherTickets() {
             trajet: ${trip.departure} -> ${trip.destination}
             place: ${ticket.seatNumber}
             prix : ${trip.price} DH`)
-        
+
+    }
+
+
+}
+
+function menuPrincipal() {
+
+    let choix;
+
+    do {
+        console.log(`
+=================================
+        RAILWAY MANAGER
+=================================
+
+1. Afficher les trajets
+2. Acheter un ticket
+3. Afficher les tickets
+4. Annuler un ticket
+5. Rechercher un ticket
+6. Filtrer les trajets
+7. Trier les trajets
+0. Quitter
+`);
+
+        choix = prompt('Choisissez une option : ');
+
+        switch (choix) {
+            case '1':
+                Afichage()
+            case '2':
+                buyTicket()
+            case '3':
+                afficherTickets
         }
 
-        
+
+
+    } while (choix !== '0') {
+        console.log('quite succeful!')
+
+    }
 }
+menuPrincipal()
