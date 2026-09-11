@@ -187,7 +187,7 @@ let ticketId = 1
 function buyTicket(inputId, passengerName) {
     inputId = Number(prompt('entrer votre id de votre trajet: '))
     passengerName = prompt('entrer vortre nom: ')
-    let trip = checkId(inputId)
+    let trip = checkTrip(inputId)
     if (trip == false) {
         console.log('Trajet introuvable.');
         return
@@ -221,7 +221,7 @@ function Afichage() {
 
 }
 // CHECKING BY ID
-function checkId(inputId) {
+function checkTrip(inputId) {
     for (let i = 0; i < trips.length; i++) {
         if (trips[i].id == inputId) {
             return trips[i]
@@ -231,7 +231,7 @@ function checkId(inputId) {
 }
 // CHECKING BY SEAT
 function checkSeat(inputId) {
-    let trip = checkId(inputId);
+    let trip = checkTrip(inputId);
     if (!trip) {
         return false;
     }
@@ -241,7 +241,7 @@ function checkSeat(inputId) {
     return false
 }
 // FUNCTION DE CREATION DE TICKET
-function creatingTicket(trip, passengerName) {
+function creatingTicket(trip, passengerName) { 
     let newTicket = {
         id: ticketId++,
         passangerName: passengerName.toLowerCase(),
@@ -261,7 +261,7 @@ function afficherTickets() {
         return;
     }
     for (let ticket of tickets) {
-        let trip = checkId(ticket.tripId)
+        let trip = checkTrip(ticket.tripId)
         console.log(`
             Ticket #: ${ticket.id}
             Passager :${ticket.passangerName}
@@ -324,13 +324,14 @@ function menuPrincipal() {1
 function annulationTicket() {
     let idIAnnul = Number(prompt('Entrer le ID de votre ticket pour votre suprimation: '))
     let ticketFound = false
+    let trip;
     for (let i = 0 ; i<tickets.length; i++) {
         if (tickets[i].id === idIAnnul) {
             ticketFound = true
 
-            let trip = checkId(tickets[i].tripId)
+            trip = checkTrip(tickets[i].tripId)
             if (trip){
-                trips[i].availableSeats++
+                trip.availableSeats++
             }
             tickets.splice(i, 1)
            
@@ -339,33 +340,27 @@ function annulationTicket() {
             return    
         }
     }
-    if (!ticketFound){
-        console.log("votre ticket nè pas dans notre archive")
-    }
-    
-    
-}
-menuPrincipal()
+    console.log("votre ticket nè pas dans notre archive")
+}   
 
 function rechercherTicket() {
     let nomDePassage = prompt('entrer votre nom: ');
-    let ticketsTrouve = false
-    let trip
+    let trip;
     for (let i = 0; i < tickets.length; i++) {
-        if (tickets[i].passangerName === nomDePassage) {
-            trip = checkId(tickets[i])
+        trip = checkTrip(tickets[i].tripId)
+        if (tickets[i].passangerName === nomDePassage.toLowerCase()) {
             console.log(`
                 ticket# ${tickets[i].id}
                 Passage: ${tickets[i].passangerName}
                 trajet: ${trip.departure} -> ${trip.departure}
                 Place : ${tickets[i].seatNumber}
-                prix : ${trip.price}`)
-            }
-            ticketsTrouve = true
+                prix : ${trip.price}
+            `)
+        }
     } 
-    if (ticketsTrouve == false) {
-        console.log("Aucun ticket trouvé pour ce passager. ")
-        return;
-    }
-}
-
+    console.log("Aucun ticket trouvé pour ce passager. ")
+ }
+    
+    
+    
+menuPrincipal()
