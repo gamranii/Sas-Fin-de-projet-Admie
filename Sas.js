@@ -181,7 +181,8 @@ const trips = [
     }
 ];
 const prompt = require('prompt-sync')();
-const tickets = []
+let tickets = []
+let ticketId = 1
 
 function buyTicket(inputId, passengerName) {
     inputId = Number(prompt('entrer votre id de votre trajet: '))
@@ -201,7 +202,7 @@ function buyTicket(inputId, passengerName) {
     console.log(`\n Ticket acheté avec succès ! 
         Ticket # ${(tickets.length - 1) + 1}
         Passager : ${passengerName}
-        Trajet : ${trip.departureTime} -> ${trip.destination}
+        Trajet : ${trip.departure} -> ${trip.destination}
         Place : ${ticket.seatNumber}
         prix : ${ticket.price} \n`);
 
@@ -242,8 +243,8 @@ function checkSeat(inputId) {
 // FUNCTION DE CREATION DE TICKET
 function creatingTicket(trip, passengerName) {
     let newTicket = {
-        id: (tickets.length - 1) + 1,
-        passangerName: passengerName,
+        id: ticketId++,
+        passangerName: passengerName.toLowerCase(),
         seatNumber: 51 - trip.availableSeats,
         tripId: trip.id,
         price: trip.price
@@ -273,7 +274,7 @@ function afficherTickets() {
 
 }
 
-function menuPrincipal() {
+function menuPrincipal() {1
 
     let choix;
 
@@ -307,6 +308,10 @@ function menuPrincipal() {
                 break
             case '4':
                 annulationTicket()
+                break
+            case '5':
+                rechercherTicket()
+                break
         }
 
 
@@ -316,23 +321,51 @@ function menuPrincipal() {
 
     }
 }
-menuPrincipal()
 function annulationTicket() {
     let idIAnnul = Number(prompt('Entrer le ID de votre ticket pour votre suprimation: '))
-    let ticketFunction = false
-    for (let i = 0; i < tickets.length; i++) {
+    let ticketFound = false
+    for (let i = 0 ; i<tickets.length; i++) {
         if (tickets[i].id === idIAnnul) {
+            ticketFound = true
+
             let trip = checkId(tickets[i].tripId)
-            if (trip) {
-                trip.availableSeats++
+            if (trip){
+                trips[i].availableSeats++
             }
+            tickets.splice(i, 1)
+           
+            console.log(`Identifiant du ticket : ${idIAnnul}
+            Ticket annulé avec succès.!`)
+            return    
         }
-        tickets.splice(i, 1)
-        ticketFunction = true
-        console.log(`Identifiant du ticket : ${idIAnnul}
-        Ticket annulé avec succès.!`)
-        break
-    }console.log("Je n'ai pas trouvé ton trajet!")
+    }
+    if (!ticketFound){
+        console.log("votre ticket nè pas dans notre archive")
+    }
+    
+    
+}
+menuPrincipal()
+
+function rechercherTicket() {
+    let nomDePassage = prompt('entrer votre nom: ');
+    let ticketsTrouve = false
+    let trip
+    for (let i = 0; i < tickets.length; i++) {
+        if (tickets[i].passangerName === nomDePassage) {
+            trip = checkId(tickets[i])
+            console.log(`
+                ticket# ${tickets[i].id}
+                Passage: ${tickets[i].passangerName}
+                trajet: ${trip.departure} -> ${trip.departure}
+                Place : ${tickets[i].seatNumber}
+                prix : ${trip.price}`)
+            }
+            ticketsTrouve = true
+    } 
+    if (ticketsTrouve == false) {
+        console.log("Aucun ticket trouvé pour ce passager. ")
+        return;
+    }
 }
 
-//  menuPrincipal()
