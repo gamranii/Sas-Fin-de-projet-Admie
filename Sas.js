@@ -275,7 +275,7 @@ function buyTicket(inputId, passengerName) {
   }
   let ticket = creatingTicket(trip, passengerName);
   console.log(`\n Ticket acheté avec succès ! 
-        Ticket # ${tickets.length - 1 + 1}
+        Ticket # ${tickets.length }
         Passager : ${passengerName}
         Trajet : ${trip.departure} -> ${trip.destination}
         Place : ${ticket.seatNumber}
