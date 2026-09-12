@@ -200,6 +200,8 @@ function menuPrincipal() {
 5. Rechercher un ticket
 6. Filtrer les trajets
 7. Trier les trajets
+8. Nombre total de tickets vendus
+9. Chiffre d'affaires total
 0. Quitter
 `);
 
@@ -227,11 +229,21 @@ function menuPrincipal() {
       case 7:
         trierTrajet();
         break;
+      case 8:
+        nombreTotaleTicket();
+        break;
+      case 9:
+        chiffreAffaire();
+        break;
+      case 0:
+        console.log("quite succeful!");
+        break;
+      default:
+        console.log("\nvotre choix né pas trouver!");
+        break;
     }
   } while (choix !== 0);
-  console.log("quite succeful!");
 }
-
 
 //prancipal functions
 
@@ -300,7 +312,7 @@ function annulationTicket() {
       }
       tickets.splice(i, 1);
 
-      console.log(`\nIdentifiant du ticket : ${idIAnnul}
+      console.log(`\n
             Ticket annulé avec succès.!`);
       return;
     }
@@ -318,7 +330,7 @@ function rechercherTicket() {
       console.log(`
                 ticket# ${tickets[i].id}
                 Passage: ${tickets[i].passangerName}
-                trajet: ${trip.departure} -> ${trip.departure}
+                trajet: ${trip.departure} -> ${trip.destination}
                 Place : ${tickets[i].seatNumber}
                 prix : ${trip.price}
             `);
@@ -359,7 +371,16 @@ function trierTrajet() {
   }
   Afichage();
 }
-
+function nombreTotaleTicket() {
+  console.log(`Nombre total de tickets : ${tickets.length}`);
+}
+function chiffreAffaire() {
+  let price = 0;
+  for (let i = 0; i < tickets.length; i++) {
+    price += tickets[i].price;
+  }
+  console.log(`\nChiffre d'affaires total : ${price} DH`);
+}
 
 //helper functions
 
@@ -384,10 +405,17 @@ function checkSeat(inputId) {
 }
 
 function creatingTicket(trip, passengerName) {
+  let lastSeatNumber;
+  if (tickets.length == 0) {
+    lastSeatNumber = 0;
+  } else {
+    lastSeatNumber = tickets[tickets.length - 1].seatNumber;
+  }
+
   let newTicket = {
     id: ticketId++,
     passangerName: passengerName.toLowerCase(),
-    seatNumber: 51 - trip.availableSeats,
+    seatNumber: lastSeatNumber + 1,
     tripId: trip.id,
     price: trip.price,
   };
@@ -395,8 +423,5 @@ function creatingTicket(trip, passengerName) {
   tickets.push(newTicket);
   return newTicket;
 }
-
-
-
 
 menuPrincipal();
